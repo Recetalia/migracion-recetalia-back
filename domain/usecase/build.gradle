@@ -1,0 +1,19 @@
+// ─────────────────────────────────────────────
+// Module name: usecase
+// Layer: Domain / Use Case
+// Responsibility:
+//  - Application business rules
+//  - Migration orchestration logic
+//  - Depends on model and output ports only
+// ─────────────────────────────────────────────
+
+plugins {
+  id 'java'
+}
+
+dependencies {
+  implementation project(':model')
+  compileOnly "org.projectlombok:lombok:"
+  annotationProcessor "org.projectlombok:lombok"
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+}

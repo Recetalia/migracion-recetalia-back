@@ -1,0 +1,28 @@
+rootProject.name = 'migracion-recetalia-back'
+
+include ':app-service'
+project(':app-service').projectDir = file('./applications/app-service')
+
+include ':model'
+project(':model').projectDir = file('./domain/model')
+
+include ':usecase'
+project(':usecase').projectDir = file('./domain/usecase')
+
+include ':utility'
+project(':utility').projectDir = file('./infrastructure/helpers/utility')
+
+include ':reactive-web'
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+
+include ':configuration'
+project(':configuration').projectDir = file('./infrastructure/configuration')
+
+include ':prod-db'
+project(':prod-db').projectDir = file('./infrastructure/driven-adapters/prod-db')
+
+include ':dev-db'
+project(':dev-db').projectDir = file('./infrastructure/driven-adapters/dev-db')
+
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')

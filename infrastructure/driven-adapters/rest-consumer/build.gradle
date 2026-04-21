@@ -1,0 +1,35 @@
+// ─────────────────────────────────────────────
+// Module name: rest-consumer
+// Layer: Infrastructure / Driven Adapter (HTTP)
+// Responsibility:
+//  - External REST integrations
+//  - WebClient-based adapters
+//  - Implements outbound ports
+// ─────────────────────────────────────────────
+
+plugins {
+  id 'java'
+}
+
+group = 'com.previsora.migracion_recetalia.drivenadapters.restconsumer'
+version = 'unspecified'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation project(':model')
+  implementation project(':usecase')
+  implementation 'org.springframework.boot:spring-boot-starter-webflux'
+  implementation 'io.projectreactor.netty:reactor-netty'
+  annotationProcessor 'org.projectlombok:lombok'
+  compileOnly 'org.projectlombok:lombok'
+  testImplementation platform('org.junit:junit-bom:5.10.0')
+  testImplementation 'org.junit.jupiter:junit-jupiter'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+  useJUnitPlatform()
+}

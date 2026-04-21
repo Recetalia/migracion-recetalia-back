@@ -1,0 +1,32 @@
+// ─────────────────────────────────────────────
+// Module name: configuration
+// Layer: Infrastructure / Configuration
+// Responsibility:
+//  - Bean wiring and dependency injection
+//  - Multi-database R2DBC configuration
+//  - Cross-module configuration (OpenAPI, WebClient)
+// ─────────────────────────────────────────────
+
+plugins {
+  id 'java'
+}
+
+dependencies {
+  implementation project(':model')
+  implementation project(':usecase')
+  implementation project(':reactive-web')
+
+  // Spring Boot
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+  implementation 'org.springframework:spring-context'
+
+  // springdoc starter
+  implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${versions.springdoc}"
+
+  // R2DBC drivers — both are needed in configuration for dual ConnectionFactory setup
+  implementation 'org.mariadb:r2dbc-mariadb:1.2.2'
+  implementation 'io.asyncer:r2dbc-mysql:1.1.0'
+
+  // Connection pooling — wraps prod/dev ConnectionFactory for connection reuse
+  implementation 'io.r2dbc:r2dbc-pool'
+}

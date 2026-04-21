@@ -1,0 +1,23 @@
+// ─────────────────────────────────────────────
+// Module name: dev-db
+// Layer: Infrastructure / Driven Adapter (Target Database)
+// Responsibility:
+//  - MySQL 8.0 target database (development)
+//  - Read/write access to recetali_dnma, recetali_receta and securitydb
+//  - Spring Data R2DBC repositories
+//  - Entity to DTO mapping
+//  - Implements target repository ports
+// ─────────────────────────────────────────────
+
+
+dependencies {
+  implementation project(':model')
+  implementation project(':usecase')
+  implementation project(':utility')
+
+  implementation 'org.modelmapper:modelmapper:3.2.0'
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+  implementation 'com.fasterxml.jackson.core:jackson-databind'
+  implementation 'io.asyncer:r2dbc-mysql:1.1.0'
+  runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
+}

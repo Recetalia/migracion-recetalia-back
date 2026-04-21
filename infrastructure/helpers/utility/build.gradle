@@ -1,0 +1,27 @@
+// ─────────────────────────────────────────────
+// Module name: utility
+// Layer: Infrastructure / Helper
+// Responsibility:
+//  - Shared constants and utilities
+//  - Cross-cutting helpers
+//  - Reusable technical components
+// ─────────────────────────────────────────────
+
+plugins {
+  id 'java'
+}
+
+dependencies {
+  implementation project(':model')
+
+  implementation 'org.springframework:spring-context'
+  implementation 'io.projectreactor:reactor-core'
+
+  testImplementation platform('org.junit:junit-bom:5.10.0')
+  testImplementation 'org.junit.jupiter:junit-jupiter'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+  useJUnitPlatform()
+}

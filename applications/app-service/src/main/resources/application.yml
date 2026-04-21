@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────
+# Base configuration (all profiles)
+# ─────────────────────────────────────────────
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
+      - org.springframework.boot.autoconfigure.r2dbc.R2dbcTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.r2dbc.R2dbcDataAutoConfiguration
+  profiles:
+    active: local
+  webflux:
+    base-path: /api
+  application:
+    name: migracion-recetalia-back
+
+logging:
+  level:
+    com.previsora.migracion_recetalia: INFO
+    org.springframework.r2dbc: WARN
+    io.r2dbc: WARN
+
+server:
+  port: 8094
+  forward-headers-strategy: framework
+
+
+# ─────────────────────────────────────────────
+# Source database (prod) - MariaDB 10.5
+# Schemas: recetali_dnma, recetali_receta
+# ─────────────────────────────────────────────
+datasource:
+  prod:
+    host: ${PROD_DB_HOST:localhost}
+    port: ${PROD_DB_PORT:3308}
+    username: ${PROD_DB_USERNAME:root}
+    password: ${PROD_DB_PASSWORD:change_me}
+    schemas:
+      dnma: ${recetali_dnma}
+      receta: ${recetali_receta}
+
+  # ─────────────────────────────────────────────
+  # Target database (dev) - MySQL 8.0
+  # Schemas: recetali_dnma, recetali_receta, securitydb
+  # ─────────────────────────────────────────────
+  dev:
+    host: ${DEV_DB_HOST:localhost}
+    port: ${DEV_DB_PORT:3309}
+    username: ${DEV_DB_USERNAME:root}
+    password: ${DEV_DB_PASSWORD:change_me}
+    schemas:
+      dnma: ${recetali_dnma}
+      receta: ${recetali_receta}
+      security: ${securitydb}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+openapi:
+  server-url: ${OPENAPI_SERVER_URL:http://localhost:8094/api}

@@ -1,0 +1,23 @@
+// ─────────────────────────────────────────────
+// Module name: prod-db
+// Layer: Infrastructure / Driven Adapter (Source Database)
+// Responsibility:
+//  - MariaDB 10.5 source database (production)
+//  - Read-only access to recetali_dnma and recetali_receta
+//  - Spring Data R2DBC repositories
+//  - Entity to DTO mapping
+//  - Implements source repository ports
+// ─────────────────────────────────────────────
+
+
+dependencies {
+  implementation project(':model')
+  implementation project(':usecase')
+  implementation project(':utility')
+
+  implementation 'org.modelmapper:modelmapper:3.2.0'
+  implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+  implementation 'com.fasterxml.jackson.core:jackson-databind'
+  implementation 'org.mariadb:r2dbc-mariadb:1.2.2'
+  runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
+}

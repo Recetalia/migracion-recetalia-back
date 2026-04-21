@@ -1,0 +1,21 @@
+// ─────────────────────────────────────────────
+// Module name: app-service
+// Layer: Application (Boot)
+// Responsibility:
+//  - Spring Boot entry point
+//  - Application startup and configuration loading
+//  - Assembles all modules
+//  - Produces the executable JAR
+// ─────────────────────────────────────────────
+
+
+dependencies {
+  implementation project(':model')
+  implementation project(':prod-db')
+  implementation project(':dev-db')
+  implementation project(':usecase')
+  implementation project(':rest-consumer')
+  implementation project(':reactive-web')
+  implementation project(':configuration')
+  implementation project(':utility')
+}

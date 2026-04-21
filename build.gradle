@@ -1,0 +1,133 @@
+// ─────────────────────────────────────────────
+// Module name: root
+// Project: migracion-recetalia-back
+// Responsibility:
+//  - Multi-module orchestration
+//  - Dependency management
+//  - Plugin and version alignment
+//  - CI/CD entry point
+// ─────────────────────────────────────────────
+
+plugins {
+  id 'java'
+  id 'jacoco'
+  id 'io.spring.dependency-management' version '1.1.7'
+  id 'org.springframework.boot' version '3.3.5' apply false
+  id "org.sonarqube" version "5.1.0.4882"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Migracion Recetalia Back"
+    }
+}
+
+ext.versions = [
+        springBoot    : '3.3.5',
+        springDepMgmt : '1.1.7',
+        springCloud   : '2022.0.4',
+        lombok        : '1.18.36',
+        mapstruct     : '1.5.5.Final',
+        springdoc     : '2.5.0',
+        gson          : '2.11.0',
+        jacoco        : '0.8.5',
+]
+
+allprojects {
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'jacoco'
+  apply plugin: 'io.spring.dependency-management'
+
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(21)
+    }
+  }
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+    }
+  }
+
+  dependencies {
+    // Lombok
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    testCompileOnly "org.projectlombok:lombok:${versions.lombok}"
+    testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+    // MapStruct
+    implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
+
+    // Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Amapstruct.suppressGeneratorTimestamp=true']
+  }
+
+  tasks.named('test', Test) {
+    useJUnitPlatform()
+  }
+}
+
+// Apply Spring Boot ONLY to the runnable module
+project(':app-service') {
+  apply plugin: 'org.springframework.boot'
+
+  bootJar {
+    archiveFileName = 'app-service-0.0.1-SNAPSHOT.jar'
+    mainClass = 'com.previsora.migracion_recetalia.applications.MigracionRecetaliaApplication'
+  }
+
+  dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${versions.springBoot}"
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.projectreactor.netty:reactor-netty'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // springdoc v2 starter for WebFlux
+    implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${versions.springdoc}"
+
+    implementation "com.google.code.gson:gson:${versions.gson}"
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Amapstruct.suppressGeneratorTimestamp=true']
+  }
+
+  tasks.named('test', Test) {
+    useJUnitPlatform()
+  }
+}
+
+tasks.named('wrapper') {
+  gradleVersion = '8.10.2'
+}
+
+// Ensure -parameters compiler flag for WebFlux @PathVariable/@RequestParam resolution
+subprojects {
+  tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-parameters']
+  }
+}

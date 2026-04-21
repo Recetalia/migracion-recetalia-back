@@ -1,0 +1,61 @@
+#############################
+# Java / Gradle / Spring Boot
+#############################
+
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local Gradle config
+gradle.properties
+
+# Build outputs
+bin/
+out/
+
+#############################
+# IntelliJ IDEA
+#############################
+.idea/
+*.iml
+*.iws
+*.ipr
+
+#############################
+# VSCode
+#############################
+.vscode/
+
+#############################
+# Eclipse / STS
+#############################
+.classpath
+.project
+.settings/
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+#############################
+# OS-specific junk
+#############################
+.DS_Store
+Thumbs.db
+
+#############################
+# NetBeans
+#############################
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+#############################
+# Logs
+#############################
+*.log
+logs/
