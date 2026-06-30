@@ -1,6 +1,7 @@
 package com.previsora.migracion_recetalia.configuration;
 
 import com.previsora.migracion_recetalia.configuration.properties.DatabaseProperties;
+import com.previsora.migracion_recetalia.configuration.properties.SafetyProperties;
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
 import io.r2dbc.spi.ConnectionFactories;
@@ -32,7 +33,7 @@ import java.time.Duration;
  * Spring Boot's R2DBC autoconfiguration is disabled (see application.yml excludes).
  */
 @Configuration
-@EnableConfigurationProperties(DatabaseProperties.class)
+@EnableConfigurationProperties({DatabaseProperties.class, SafetyProperties.class})
 public class R2dbcConfig {
 
     private final DatabaseProperties props;
@@ -105,7 +106,7 @@ public class R2dbcConfig {
                 .option(ConnectionFactoryOptions.PASSWORD, d.getPassword())
                 .option(ConnectionFactoryOptions.CONNECT_TIMEOUT, Duration.ofSeconds(30))
                 .option(Option.valueOf("socketTimeout"), Duration.ofMinutes(10))
-                .option(Option.valueOf("sslMode"), "DISABLED")
+                .option(Option.valueOf("sslMode"), d.getSslMode())
                 .build();
         return new ConnectionPool(ConnectionPoolConfiguration.builder(ConnectionFactories.get(options))
                 .name("devPool")

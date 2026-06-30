@@ -34,6 +34,8 @@ public class DatabaseProperties {
         private int port = 3306;
         private String username = "root";
         private String password = "root";
+        /** r2dbc sslMode: DISABLED (local) | PREFERRED | REQUIRED (DO managed PRE) | VERIFY_CA | VERIFY_IDENTITY. */
+        private String sslMode = "DISABLED";
         private SchemaNames schemas = new SchemaNames();
 
         public String getHost() { return host; }
@@ -44,6 +46,8 @@ public class DatabaseProperties {
         public void setUsername(String username) { this.username = username; }
         public String getPassword() { return password; }
         public void setPassword(String password) { this.password = password; }
+        public String getSslMode() { return sslMode; }
+        public void setSslMode(String sslMode) { this.sslMode = sslMode; }
         public SchemaNames getSchemas() { return schemas; }
         public void setSchemas(SchemaNames schemas) { this.schemas = schemas; }
     }
