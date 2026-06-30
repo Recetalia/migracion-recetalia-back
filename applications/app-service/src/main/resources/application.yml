@@ -49,10 +49,32 @@ datasource:
     port: ${DEV_DB_PORT:3309}
     username: ${DEV_DB_USERNAME:root}
     password: ${DEV_DB_PASSWORD:change_me}
+    # DISABLED para MySQL local; REQUIRED para la DB de PRE (DigitalOcean managed exige SSL).
+    sslMode: ${DEV_DB_SSLMODE:DISABLED}
     schemas:
       dnma: ${recetali_dnma}
       receta: ${recetali_receta}
       security: ${securitydb}
+
+# ─────────────────────────────────────────────
+# Safety guard — protege el destino (dev) de apuntar a PRODUCCIÓN.
+# El TRUNCATE / insert sólo corre si el host destino:
+#   - NO contiene ningún token de blocked-target-hosts (prod), y
+#   - contiene algún token de allowed-target-hosts (PRE / local), y
+#   - no es el mismo host:puerto que el origen (prod).
+# Si no, la app NO arranca (fail-fast) y el truncate aborta.
+# ─────────────────────────────────────────────
+migration:
+  safety:
+    enabled: ${MIGRATION_SAFETY_ENABLED:true}
+    allowed-target-hosts:
+      - recetaliadbpreproduccion   # DB de PRE (DigitalOcean managed) — destino real
+      - localhost                  # destino local (pruebas)
+      - 127.0.0.1
+    blocked-target-hosts:
+      - 143.110.212.167            # server de PRODUCCIÓN (origen) — NUNCA escribir acá
+      - api.recetadigital.uy       # dominio de PRODUCCIÓN
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
